@@ -28,6 +28,18 @@ def get_stats(pitcher):
             print(stats)
             return stats
     
+def get_batter_stats(batter):
+    batter_stats = pd.read_csv('BattingData.csv', encoding = 'ISO-8859-1') #encoding using ISO-8859-1
+    names = batter_stats.iloc[:,3].values
+    #print(pitcher_stats)
+    for i in range(len(names)):
+        if names[i] == batter:
+            statsdf = batter_stats.iloc[i,31:37]
+            stats = statsdf.values.tolist()
+            stats += [batter_stats.iloc[i,11]]
+            print(stats)
+            return stats
+
 if True:
     get_stats('Jhoulys Chacin') #test get_stats function on a player
     
