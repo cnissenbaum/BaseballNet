@@ -25,9 +25,10 @@ def get_batter_names():
     output: a list of batter names
     """
     batter_names = df.iloc[:,106:160:3].values #gets the name of the starting batters (V,H)
+    batter_names = batter_names.tolist()
     return batter_names
 
-def get_stats(pitcher):
+def get_pitcher_stats(pitcher):
     """ gets the pitching stats given a name
     input: name of player
     output: their season statistics (ERA, FIP, WHIP, H9, HR9, BB9, SO9)
@@ -36,28 +37,31 @@ def get_stats(pitcher):
     names = pitcher_stats.iloc[:,3].values
     #print(pitcher_stats)
     for i in range(len(names)):
-        if names[i] == pitcher:
+        if (names[i] == pitcher or names[i] == pitcher + " Jr."):
             statsdf = pitcher_stats.iloc[i,31:37]
             stats = statsdf.values.tolist()
             stats += [pitcher_stats.iloc[i,11]]
-            print(stats)
             return stats
     
 def get_batter_stats(batter):
     batter_stats = pd.read_csv('BattingData.csv', encoding = 'ISO-8859-1') #encoding using ISO-8859-1
     names = batter_stats.iloc[:,3].values
-    #print(pitcher_stats)
     for i in range(len(names)):
-        if names[i] == batter:
-            statsdf = batter_stats.iloc[i,31:37]
+        if (names[i] == batter or names[i] == batter + " Jr."):
+            statsdf = batter_stats.iloc[i,21:26]
             stats = statsdf.values.tolist()
-            stats += [batter_stats.iloc[i,11]]
-            print(stats)
             return stats
 
 if True:
     """
     Main function for tests
     """
-    get_stats('Jhoulys Chacin') #test get_stats function on a player
-    
+    #get_pitcher_stats('Jhoulys Chacin') #test get_stats function on a player
+    #get_batter_stats('Charlie Blackmon')
+    #batter = get_batter_names()[423][12]
+    #print(batter)
+    #print(get_batter_stats(batter))
+    pitcher = get_pitcher_names()[34][1]
+    print(pitcher)
+    print(get_pitcher_stats(pitcher))
+
