@@ -4,13 +4,28 @@ import pandas as pd
 df = pd.read_csv('LineupData.csv')
 
 #print(df)
+def get_scores():
+    """
+    Gets the scores for the visit
+    """
+    scores = df.iloc[:,9:11].values #gets scores of the visiting and home teams
+    return scores
 
-# scores = df.iloc[:,9:11].values #gets scores of the visiting and home teams
-# pitcher_names = df.iloc[:,102:105:2].values #gets the names of the starting pitchers (V,H)
-# batter_names = df.iloc[:,106:160:3].values #gets the name of the starting batters (V,H)
-# print(pitcher_names)
+def get_pitcher_names():
+    """
+    Gets the pitcher names for both teams
+    output: a list of pitcher names
+    """
+    pitcher_names = df.iloc[:,102:105:2].values #gets the names of the starting pitchers (V,H)
+    return pitcher_names
 
-
+def get_batter_names():
+    """
+    Gets the batter names for both teams
+    output: a list of batter names
+    """
+    batter_names = df.iloc[:,106:160:3].values #gets the name of the starting batters (V,H)
+    return batter_names
 
 def get_stats(pitcher):
     """ gets the pitching stats given a name
@@ -41,5 +56,8 @@ def get_batter_stats(batter):
             return stats
 
 if True:
+    """
+    Main function for tests
+    """
     get_stats('Jhoulys Chacin') #test get_stats function on a player
     
