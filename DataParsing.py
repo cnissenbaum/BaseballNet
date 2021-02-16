@@ -3,13 +3,17 @@ import pandas as pd
 
 df = pd.read_csv('LineupData.csv')
 
-#print(df)
+
 def get_scores():
     """
     Gets the scores for the visit
     """
     scores = df.iloc[:,9:11].values #gets scores of the visiting and home teams
     return scores
+
+def get_game_rd(i):
+    scores = df.iloc[i,9:11].values.tolist()
+    return [scores[0] - scores[1]]
 
 def get_pitcher_names():
     """
@@ -50,18 +54,50 @@ def get_batter_stats(batter):
         if (names[i] == batter or names[i] == batter + " Jr."):
             statsdf = batter_stats.iloc[i,21:26]
             stats = statsdf.values.tolist()
+            #print(stats)
             return stats
 
-if True:
+def create_csv():
     """
-    Main function for tests
     """
-    #get_pitcher_stats('Jhoulys Chacin') #test get_stats function on a player
-    #get_batter_stats('Charlie Blackmon')
-    #batter = get_batter_names()[423][12]
-    #print(batter)
-    #print(get_batter_stats(batter))
-    pitcher = get_pitcher_names()[34][1]
-    print(pitcher)
-    print(get_pitcher_stats(pitcher))
+    stats = []
+    for i in range(df.shape[0]):
+        row = []
+        pitcher_names = df.iloc[i,102:105:2].values.tolist()
+        for j in pitcher_names:
+            try:
+                row += get_pitcher_stats(j)
+            except:
+                print("Perror")
+                print(j)
+            
+        batter_names = df.iloc[i,106:160:3].values.tolist()
+        for k in batter_names:
+
+            try:
+                row += get_batter_stats(k)
+            except:
+                print("error")
+                print(k)
+
+        row += get_game_rd(i)
+        #print(row)
+        stats += [row]
+    #print(stats)
+    return stats
+
+create_csv()
+
+# if True:
+#     """
+#     Main function for tests
+#     """
+#     #get_pitcher_stats('Jhoulys Chacin') #test get_stats function on a player
+#     #get_batter_stats('Charlie Blackmon')
+#     #batter = get_batter_names()[423][12]
+#     #print(batter)
+#     #print(get_batter_stats(batter))
+#     pitcher = get_pitcher_names()[34][1]
+#     print(pitcher)
+#     print(get_pitcher_stats(pitcher))
 
