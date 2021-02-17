@@ -4,8 +4,8 @@ import pandas as pd
 
 
 df = pd.read_csv('gameData.csv')
-X_data = df.iloc[:,0:104].values
-y_data = df.iloc[:,104].values
+X_data = df.iloc[:1600,:104].values
+y_data = df.iloc[:1600,104].values
 print('Data Done')
 print('Start testing')
 KNOWN_SIZE = len(y_data)
@@ -33,7 +33,7 @@ if USE_SCALER == True:
     #X_unknown = scaler.transform(X_unknown)
 
 
-mlp = MLPClassifier(hidden_layer_sizes=(64,64,20), max_iter=400, alpha=1e-6,
+mlp = MLPClassifier(hidden_layer_sizes=(16,16,16), max_iter=400, alpha=1e-6,
                         solver='adam', verbose=True, shuffle=True, early_stopping = False, tol=1e-4, 
                         random_state=None, # reproduceability
                         learning_rate_init=.003, learning_rate = 'adaptive')

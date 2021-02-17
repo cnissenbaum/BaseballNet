@@ -1,17 +1,24 @@
 import pandas as pd
 import csv
+import math
+import re
+import numpy as np
 
 df = pd.read_csv('LineupData.csv')
 
 
 def get_scores():
     """
-    Gets the scores for the visit
+    Gets the scores for the teams
     """
     scores = df.iloc[:,9:11].values #gets scores of the visiting and home teams
     return scores
 
 def get_game_rd(i):
+    """
+    Gets the game differential of a given game
+    input: an int i for the game number that we will find
+    """
     scores = df.iloc[i,9:11].values.tolist()
     return [scores[0] - scores[1]]
 
@@ -48,6 +55,10 @@ def get_pitcher_stats(pitcher):
             return stats
     
 def get_batter_stats(batter):
+    """ gets the stats of a given batter
+    input: name of player
+    output: their season statistics (BA, OBP, )
+    """
     batter_stats = pd.read_csv('BattingData.csv', encoding = 'ISO-8859-1') #encoding using ISO-8859-1
     names = batter_stats.iloc[:,3].values
     for i in range(len(names)):
@@ -73,9 +84,9 @@ def create_csv():
             
         batter_names = df.iloc[i,106:160:3].values.tolist()
         for k in batter_names:
-
+            b = get_batter_stats(k)
             try:
-                row += get_batter_stats(k)
+                row += b
             except:
                 print("error")
                 print(k)
@@ -97,7 +108,7 @@ def write_csv(filename):
         w.writerow(row)
     f.close()
 
-
+#create_csv()
 #write_csv('gameData.csv')
 # if True:
 #     """
@@ -112,3 +123,29 @@ def write_csv(filename):
 #     print(pitcher)
 #     print(get_pitcher_stats(pitcher))
 
+def goop():
+    fs = open("gameData.csv", "r")
+    fs = fs.read()
+    fs = re.split(",|\n",fs)
+
+    for i in fs:
+        
+        np.any(np.isnan(f))
+        try:
+            
+            np.isnan(f)
+        except:
+            print("p" + i + "p")
+    return 0
+
+
+
+def goop2():
+    dfr = pd.read_csv('gameData.csv')
+    for i in dfr:
+        if(not(type(i) == float)):
+            #if(np.isnan(i)):
+                print(i)
+                #print('found nan')
+print(get_pitcher_stats('Rogelio Armenteros'))
+print(get_batter_stats('Rogelio Armenteros'))
