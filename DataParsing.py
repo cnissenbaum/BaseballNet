@@ -1,5 +1,5 @@
 import pandas as pd
-
+import csv
 
 df = pd.read_csv('LineupData.csv')
 
@@ -85,9 +85,20 @@ def create_csv():
         stats += [row]
     #print(stats)
     return stats
+def write_csv(filename):
+    """
+    Takes the data and puts it into a workable csv file
+    input: filename: a csv file
+    """
+    f = open(filename, "w", newline='')
+    w = csv.writer(f)
+    stats = create_csv()
+    for row in stats:
+        w.writerow(row)
+    f.close()
 
-create_csv()
 
+#write_csv('gameData.csv')
 # if True:
 #     """
 #     Main function for tests
