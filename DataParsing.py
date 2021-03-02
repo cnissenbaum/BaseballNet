@@ -50,6 +50,7 @@ def get_pitcher_stats(pitcher):
     output: their season statistics (ERA, FIP, WHIP, H9, HR9, BB9, SO9)
     """
     #print(pitcher_stats)
+    
     for i in range(len(names)):
         if (names[i] == pitcher or names[i] == pitcher + " Jr."):
             statsdf = pitcher_stats.iloc[i,31:37]
@@ -72,14 +73,16 @@ def get_batter_stats(batter):
     """
     for i in range(len(batter_names)):
         if (batter_names[i] == batter or batter_names[i] == batter + " Jr."):
-            statsdf = batter_stats.iloc[i,21:26]
-            stats = statsdf.values.tolist()
+            #statsdf = batter_stats.iloc[i,21:26]
+            stats = [batter_stats.iloc[i,24]]
+            #stats = statsdf.values.tolist()
             if (math.isnan(stats[0])):
                 print(batter + " sucks - All zeros")
-                return [0,0,0,0,-100]
+                return [0] #[0,0,0,0,-100]
             return stats      
-    statsdf1 = batter_stats.iloc[-1,21:26]
-    stats1 = statsdf1.values.tolist()
+    #statsdf1 = batter_stats.iloc[-1,21:26]
+    stats1 = [batter_stats.iloc[-1,24]]
+    #stats1 = statsdf1.values.tolist()
     print(batter + " not found, using average league data")
     return stats1
 
@@ -124,7 +127,7 @@ def write_csv(filename):
     f.close()
 
 #create_csv()
-write_csv('gameData.csv')
+write_csv('gameData1.csv')
 # if True:
 #     """
 #     Main function for tests
