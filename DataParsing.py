@@ -20,7 +20,10 @@ def get_game_rd(i):
     input: an int i for the game number that we will find
     """
     scores = df.iloc[i,9:11].values.tolist()
-    return [scores[0] - scores[1]]
+    if (scores[0] > scores[1]):
+        return [1]
+    else:
+        return [-1]
 
 def get_pitcher_names():
     """
@@ -39,13 +42,13 @@ def get_batter_names():
     batter_names = batter_names.tolist()
     return batter_names
 
+pitcher_stats = pd.read_csv('PitchingData.csv', encoding = 'ISO-8859-1') #encoding using ISO-8859-1
+names = pitcher_stats.iloc[:,3].values
 def get_pitcher_stats(pitcher):
     """ gets the pitching stats given a name
     input: name of player
     output: their season statistics (ERA, FIP, WHIP, H9, HR9, BB9, SO9)
     """
-    pitcher_stats = pd.read_csv('PitchingData.csv', encoding = 'ISO-8859-1') #encoding using ISO-8859-1
-    names = pitcher_stats.iloc[:,3].values
     #print(pitcher_stats)
     for i in range(len(names)):
         if (names[i] == pitcher or names[i] == pitcher + " Jr."):
@@ -53,20 +56,32 @@ def get_pitcher_stats(pitcher):
             stats = statsdf.values.tolist()
             stats += [pitcher_stats.iloc[i,11]]
             return stats
-    
+    statsdf = pitcher_stats.iloc[-1,31:37]
+    stats = statsdf.values.tolist()
+    stats += [pitcher_stats.iloc[-1,11]]
+    print(pitcher + " not found, using league average")
+    return stats
+
+
+batter_stats = pd.read_csv('BattingData.csv', encoding = 'ISO-8859-1') #encoding using ISO-8859-1
+batter_names = batter_stats.iloc[:,3].values # lists all batter names    
 def get_batter_stats(batter):
     """ gets the stats of a given batter
     input: name of player
-    output: their season statistics (BA, OBP, )
+    output: their season statistics (BA, OBP, SLG, OPS, OPS+)
     """
-    batter_stats = pd.read_csv('BattingData.csv', encoding = 'ISO-8859-1') #encoding using ISO-8859-1
-    names = batter_stats.iloc[:,3].values
-    for i in range(len(names)):
-        if (names[i] == batter or names[i] == batter + " Jr."):
+    for i in range(len(batter_names)):
+        if (batter_names[i] == batter or batter_names[i] == batter + " Jr."):
             statsdf = batter_stats.iloc[i,21:26]
             stats = statsdf.values.tolist()
-            #print(stats)
-            return stats
+            if (math.isnan(stats[0])):
+                print(batter + " sucks - All zeros")
+                return [0,0,0,0,-100]
+            return stats      
+    statsdf1 = batter_stats.iloc[-1,21:26]
+    stats1 = statsdf1.values.tolist()
+    print(batter + " not found, using average league data")
+    return stats1
 
 def create_csv():
     """
@@ -109,7 +124,7 @@ def write_csv(filename):
     f.close()
 
 #create_csv()
-#write_csv('gameData.csv')
+write_csv('gameData.csv')
 # if True:
 #     """
 #     Main function for tests

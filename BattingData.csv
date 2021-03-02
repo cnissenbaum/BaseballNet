@@ -1553,4 +1553,4 @@ Rk,Name?,Column1,Column2,ID,Age,Tm,Lg,G,PA,AB,R,H,2B,3B,HR,RBI,SB,CS,BB,SO,BA,OB
 1552,Jordan Zimmermann,Jordan Zimmermann,Jordan Zimmermann,zimmejo02,33,DET,AL,1,2,2,0,0,0,0,0,0,0,0,0,2,0,0,0,0,-100,0,0,0,0,0,0
 1553,Ben Zobrist#,Ben Zobrist#,Ben Zobrist,zobribe01,38,CHC,NL,47,176,150,24,39,5,0,1,17,0,0,23,24,0.26,0.358,0.313,0.671,79,47,6,1,0,2,0
 1554,Mike Zunino,Mike Zunino,Mike Zunino,zuninmi01,28,TBR,AL,90,289,266,30,44,10,1,9,32,0,0,20,98,0.165,0.232,0.312,0.544,45,83,4,3,0,0,0
-1555,LgAvg per 600 PA,LgAvg per 600 PA,LgAvg per 600 PA,,,,,200,600,536,75,134,27,2,22,72,7,3,51,138,0.25,0.321,0.432,0.752,,232,11,6,2,4,2
+1555,LgAvg per 600 PA,LgAvg per 600 PA,LgAvg per 600 PA,,,,,200,600,536,75,134,27,2,22,72,7,3,51,138,0.25,0.321,0.432,0.752,100,232,11,6,2,4,2
