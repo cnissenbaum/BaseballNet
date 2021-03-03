@@ -3,7 +3,7 @@ from sklearn.neural_network import MLPClassifier
 import pandas as pd
 
 
-df = pd.read_csv('gameData1.csv')
+df = pd.read_csv('gameData2.csv')
 X_data = df.iloc[:,:32].values # 104
 y_data = df.iloc[:,32].values
 print('Data Done')
@@ -27,14 +27,15 @@ if USE_SCALER == True:
     from sklearn.preprocessing import StandardScaler
     scaler = StandardScaler()
     scaler.fit(X_known)   # Fit only to the training dataframe
-    # now, rescale inputs -- both testing and training
+    
+    # rescale inputs
     X_known = scaler.transform(X_train)
     X_test = scaler.transform(X_test)
-    #X_unknown = scaler.transform(X_unknown)
+    
 
 
-mlp = MLPClassifier(hidden_layer_sizes=(30,24,16), max_iter=400, alpha=1e-6,
-                        solver='adam', verbose=True, shuffle=True, early_stopping = False, tol=1e-4, 
+mlp = MLPClassifier(hidden_layer_sizes=(32,16,8), max_iter=400, alpha=1e-6, activation = "relu",
+                        solver='adam', verbose=True, shuffle=True, early_stopping = False, tol=1e-6, 
                         random_state=None, # reproduceability
                         learning_rate_init=.003, learning_rate = 'adaptive')
 print("\n\n++++++++++  TRAINING  +++++++++++++++\n\n")
