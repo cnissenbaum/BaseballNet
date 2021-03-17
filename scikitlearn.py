@@ -1,6 +1,7 @@
 import numpy as np
 from sklearn.neural_network import MLPClassifier
 import pandas as pd
+import pickle
 
 
 df = pd.read_csv('gameData2.csv')
@@ -49,3 +50,13 @@ print("Test set score: %f" % mlp.score(X_test, y_test))
 
 predictions = mlp.predict(X_test)
 print(predictions)
+
+filename = 'finalized_model.sav'
+pickle.dump(mlp, open(filename, 'wb'))
+ 
+# some time later...
+ 
+# load the model from disk
+loaded_model = pickle.load(open(filename, 'rb'))
+result = loaded_model.score(X_test, y_test)
+print(result)
