@@ -3,60 +3,73 @@ import csv
 import math
 import re
 import numpy as np
-
+# Data from Retrosheet Game Logs 
+# Global variable for reading the Lineup Data
 df = pd.read_csv('LineupData.csv')
 
+# Data from Baseball reference
+# Global variable for reading pitcher's stats
+pitcher_stats = pd.read_csv('PitchingData.csv', encoding = 'ISO-8859-1') #encoding using ISO-8859-1
+pitcher_names = pitcher_stats.iloc[:,3].values
 
-def get_scores():
-    """
-    Gets the scores for the teams
-    """
-    scores = df.iloc[:,9:11].values #gets scores of the visiting and home teams
-    return scores
+# Data from Baseball reference
+# Global variable for reading batter's stats
+batter_stats = pd.read_csv('BattingData.csv', encoding = 'ISO-8859-1') #encoding using ISO-8859-1
+batter_names = batter_stats.iloc[:,3].values # lists all batter names  
 
-def get_game_rd(i):
+
+
+def get_winner(i):
     """
-    Gets the game differential of a given game
-    input: an int i for the game number that we will find
+    Returns 1 if home team won game, -1 if visiting team won.
+    i is the row of the game examined
     """
-    scores = df.iloc[i,9:11].values.tolist()
+    scores = df.iloc[i,9:11].values.tolist()  #gets the total runs of each tea (V,H)
     if (scores[0] > scores[1]):
         return [1]
     else:
         return [-1]
 
-def get_pitcher_names():
+
+
+def get_pitcher_names(i):
     """
-    Gets the pitcher names for both teams
-    output: a list of pitcher names
+    Returns an array of the starting pitchers,
+    for the given game (row)
     """
-    pitcher_names = df.iloc[:,102:105:2].values #gets the names of the starting pitchers (V,H)
+    pitcher_names = df.iloc[i:,102:105:2].values #gets the names of the starting pitchers (V,H)
+    pitcher_names = pitcher_names.tolist()
     return pitcher_names
 
-def get_batter_names():
+
+
+def get_batter_names(i):
     """
-    Gets the batter names for both teams
-    output: a list of batter names
+    Returns an array of the starting batters,
+    for the given game (row)
     """
-    batter_names = df.iloc[:,106:160:3].values #gets the name of the starting batters (V,H)
+    batter_names = df.iloc[i:,106:160:3].values #gets the name of the starting batters (V,H)
     batter_names = batter_names.tolist()
     return batter_names
 
-pitcher_stats = pd.read_csv('PitchingData.csv', encoding = 'ISO-8859-1') #encoding using ISO-8859-1
-names = pitcher_stats.iloc[:,3].values
+
+
 def get_pitcher_stats(pitcher):
-    """ gets the pitching stats given a name
+    """ 
+    Gets the pitching stats given the name of a pitcher (no error checking)
     input: name of player
     output: their season statistics (ERA, FIP, WHIP, H9, HR9, BB9, SO9)
     """
-    #print(pitcher_stats)
     
-    for i in range(len(names)):
-        if (names[i] == pitcher or names[i] == pitcher + " Jr."):
+    for i in range(len(pitcher_names)):
+        if (pitcher_names[i] == pitcher or pitcher_names[i] == pitcher + " Jr."):
             statsdf = pitcher_stats.iloc[i,31:37]
             stats = statsdf.values.tolist()
             stats += [pitcher_stats.iloc[i,11]]
             return stats
+    
+    # If we don't find the pitcher's name
+    # We use the league average stats
     statsdf = pitcher_stats.iloc[-1,31:37]
     stats = statsdf.values.tolist()
     stats += [pitcher_stats.iloc[-1,11]]
@@ -64,56 +77,85 @@ def get_pitcher_stats(pitcher):
     return stats
 
 
-batter_stats = pd.read_csv('BattingData.csv', encoding = 'ISO-8859-1') #encoding using ISO-8859-1
-batter_names = batter_stats.iloc[:,3].values # lists all batter names    
+  
 def get_batter_stats(batter):
-    """ gets the stats of a given batter
+    """ 
+    Gets the pitching stats given the name of a batter (no error checking)
     input: name of player
-    output: their season statistics (BA, OBP, SLG, OPS, OPS+)
+    output: their season statistics (OPS)
+    
+    Commented is code to get more stats (deemed unecessary as of now)
     """
     for i in range(len(batter_names)):
         if (batter_names[i] == batter or batter_names[i] == batter + " Jr."):
+            
             #statsdf = batter_stats.iloc[i,21:26]
             stats = [batter_stats.iloc[i,24]]
             #stats = statsdf.values.tolist()
+
+            # If there are no batting stats for the found player
             if (math.isnan(stats[0])):
                 print(batter + " sucks - All zeros")
+                # We use a 0 OPS because they are probably not very good
                 return [0] #[0,0,0,0,-100]
-            return stats      
+            return stats
+    
     #statsdf1 = batter_stats.iloc[-1,21:26]
+
+    # If we don't find the pitcher's name
+    # We use the league average stats
     stats1 = [batter_stats.iloc[-1,24]]
+
     #stats1 = statsdf1.values.tolist()
+
     print(batter + " not found, using average league data")
     return stats1
 
+
+
+
 def create_csv():
     """
+    This makes a scv file with the appropiate data in the appropriate order:
+    Each row is an MLB game,
+    the first 7 columns are the Visiting starting pitchers's stats
+    the second 7 columns are the Home starting pitcher's stats
+    the next nine are the Visiting lineup's OPS, in batting order
+    the next nine are the Home lineup's OPS, in batting order
+    the last column is the result of the game (1) or (-1)
     """
+
     stats = []
     for i in range(df.shape[0]):
+        # each row of the new csv
         row = []
+        # find the starting pitchers
         pitcher_names = df.iloc[i,102:105:2].values.tolist()
+        # for each pitcher
         for j in pitcher_names:
             try:
                 row += get_pitcher_stats(j)
+            # If the pitcher's name results in an error, print
             except:
-                print("Perror")
-                print(j)
-            
+                print("Picher: " + j + " has caused an error")
+        
+        # find the starting lineups
         batter_names = df.iloc[i,106:160:3].values.tolist()
+        # for each batter
         for k in batter_names:
-            b = get_batter_stats(k)
             try:
-                row += b
+                row += get_batter_stats(k)
+            # If the batter's name results in an error, print
             except:
-                print("error")
-                print(k)
-
-        row += get_game_rd(i)
-        #print(row)
+                print("Batter:" + k + " has caused an error")
+        # lastly, we ass the winner of the game
+        row += get_winner(i)
+        # add each row to the potential csv
         stats += [row]
-    #print(stats)
     return stats
+
+
+
 def write_csv(filename):
     """
     Takes the data and puts it into a workable csv file
@@ -126,44 +168,10 @@ def write_csv(filename):
         w.writerow(row)
     f.close()
 
-#create_csv()
-write_csv('gameData1.csv')
-# if True:
-#     """
-#     Main function for tests
-#     """
-#     #get_pitcher_stats('Jhoulys Chacin') #test get_stats function on a player
-#     #get_batter_stats('Charlie Blackmon')
-#     #batter = get_batter_names()[423][12]
-#     #print(batter)
-#     #print(get_batter_stats(batter))
-#     pitcher = get_pitcher_names()[34][1]
-#     print(pitcher)
-#     print(get_pitcher_stats(pitcher))
-
-def goop():
-    fs = open("gameData.csv", "r")
-    fs = fs.read()
-    fs = re.split(",|\n",fs)
-
-    for i in fs:
-        
-        np.any(np.isnan(f))
-        try:
-            
-            np.isnan(f)
-        except:
-            print("p" + i + "p")
-    return 0
 
 
-
-def goop2():
-    dfr = pd.read_csv('gameData.csv')
-    for i in dfr:
-        if(not(type(i) == float)):
-            #if(np.isnan(i)):
-                print(i)
-                #print('found nan')
-print(get_pitcher_stats('Rogelio Armenteros'))
-print(get_batter_stats('Rogelio Armenteros'))
+if True:
+    """
+    Main function for tests
+    """
+    write_csv("gameData2.csv")
