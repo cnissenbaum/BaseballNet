@@ -4,7 +4,7 @@ import pandas as pd
 import pickle
 
 
-df = pd.read_csv('gameData2.csv')
+df = pd.read_csv('LongGameData.csv')
 X_data = df.iloc[:,:32].values # 104
 y_data = df.iloc[:,32].values
 print('Data Done')
