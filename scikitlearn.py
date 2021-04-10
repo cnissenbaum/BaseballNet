@@ -5,8 +5,8 @@ import pickle
 
 
 df = pd.read_csv('LongGameData.csv')
-X_data = df.iloc[:,:32].values # 104
-y_data = df.iloc[:,32].values
+X_data = df.iloc[:60,:32].values # 104
+y_data = df.iloc[:60,32].values
 print('Data Done')
 print('Start testing')
 KNOWN_SIZE = len(y_data)
@@ -53,8 +53,6 @@ print(predictions)
 
 filename = 'finalized_model.sav'
 pickle.dump(mlp, open(filename, 'wb'))
- 
-# some time later...
  
 # load the model from disk
 loaded_model = pickle.load(open(filename, 'rb'))
