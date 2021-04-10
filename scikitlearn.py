@@ -5,8 +5,8 @@ import pickle
 
 
 df = pd.read_csv('LongGameData.csv')
-X_data = df.iloc[:60,:32].values # 104
-y_data = df.iloc[:60,32].values
+X_data = df.iloc[:,:32].values # 104
+y_data = df.iloc[:,32].values
 print('Data Done')
 print('Start testing')
 KNOWN_SIZE = len(y_data)
@@ -35,7 +35,7 @@ if USE_SCALER == True:
     
 
 
-mlp = MLPClassifier(hidden_layer_sizes=(32,16,8), max_iter=400, alpha=1e-6, activation = "relu",
+mlp = MLPClassifier(hidden_layer_sizes=(64,32,8), max_iter=400, alpha=1e-6, activation = "relu",
                         solver='adam', verbose=True, shuffle=True, early_stopping = False, tol=1e-6, 
                         random_state=None, # reproduceability
                         learning_rate_init=.003, learning_rate = 'adaptive')

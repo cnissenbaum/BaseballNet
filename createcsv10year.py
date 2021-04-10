@@ -3,14 +3,15 @@ import csv
 import math
 import re
 import numpy as np
-import unidecode
+# import unidecode
 
 def create_csv():
 
+    # game = 0
     write = []
 
     for i in range(10,21):
-        print("Year 20" + str(i))
+        # print("Year 20" + str(i))
         f = open("Data/LineupData/GL20"+str(i)+".TXT","r")
         g = open("Data/PitchingData/20"+str(i)+"PitchingData.csv")
         h = open("Data/BattingData/20"+str(i)+"BattingData.csv")
@@ -29,11 +30,13 @@ def create_csv():
 
         battingData = battingData[0:-1]
 
-        
 
         lineupData = f.read().replace('"',"").split('\n')
         lineupData = lineupData[0:-1]
         for line in lineupData:
+            # print(game)
+            # game += 1
+
             gamePitchingData = []
             gameBattingData = []
 
@@ -69,19 +72,18 @@ def get_game_pitching_data(name, data):
             return stats
 
     # Pitching Stats
-    print("P: " + name)
+    # print("P: " + name)
     return [data[-1][9]] + data[-1][28:34]
 
 
 def get_game_batting_data(name, data):
-
-
+    
     for line in data:
         if(name == line[1]):
             return [line[21]]
     
-    print("H: " + name)
     # ops
+    # print("H: " + name)
     return [data[-1][21]]
 
 create_csv()
