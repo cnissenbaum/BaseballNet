@@ -7,6 +7,8 @@ import urllib
 
 import numpy as np
 import tensorflow as tf
+from tensorflow.python.compiler.tensorrt import trt_convert as trt
+
 
 # Data sets
 IRIS_TRAINING = "LongGameData.csv"
