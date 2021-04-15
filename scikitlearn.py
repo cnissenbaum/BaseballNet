@@ -14,7 +14,7 @@ indices = np.random.permutation(KNOWN_SIZE)
 X_known = X_data[indices]
 y_known = y_data[indices]
 
-TRAIN_FRACTION = 0.95
+TRAIN_FRACTION = 0.70
 TRAIN_SIZE = int(TRAIN_FRACTION*KNOWN_SIZE)
 TEST_SIZE = KNOWN_SIZE - TRAIN_SIZE   
 X_train = X_known[:TRAIN_SIZE]
@@ -36,9 +36,9 @@ if USE_SCALER == True:
 
 
 mlp = MLPClassifier(hidden_layer_sizes=(64, 32, 16, 8), max_iter=400, alpha=1e-8, activation = "relu",
-                        solver='adam', verbose=True, shuffle=True, early_stopping = False, tol=1e-12, 
+                        solver='adam', verbose=True, shuffle=True, early_stopping = False, tol=1e-8, 
                         random_state=None, # reproduceability
-                        learning_rate_init=.003, learning_rate = 'adaptive')
+                        learning_rate_init=.03, learning_rate = 'constant') #invscaling, adaptive, constant
 print("\n\n++++++++++  TRAINING  +++++++++++++++\n\n")
 mlp.fit(X_train, y_train)
 
