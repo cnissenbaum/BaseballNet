@@ -34,13 +34,20 @@ if USE_SCALER == True:
     X_test = scaler.transform(X_test)
     
 
-
-mlp = MLPClassifier(hidden_layer_sizes=(64,32,8), max_iter=400, alpha=1e-6, activation = "relu",
+mlp = MLPClassifier(hidden_layer_sizes=(64,8,8,8), max_iter=400, alpha=1e-6, activation = "relu",
                         solver='adam', verbose=True, shuffle=True, early_stopping = False, tol=1e-6, 
                         random_state=None, # reproduceability
                         learning_rate_init=.003, learning_rate = 'adaptive')
 print("\n\n++++++++++  TRAINING  +++++++++++++++\n\n")
 mlp.fit(X_train, y_train)
+
+
+"""
+# trying k nearest neighbors
+from sklearn.neighbors import KNeighborsClassifier
+neigh = KNeighborsClassifier(n_neighbors=25)
+neigh.fit(X_train, y_train)
+"""
 
 print("\n\n++++++++++++  TESTING  +++++++++++++\n\n")
 print("Training set score: %f" % mlp.score(X_train, y_train))
@@ -58,3 +65,7 @@ pickle.dump(mlp, open(filename, 'wb'))
 loaded_model = pickle.load(open(filename, 'rb'))
 result = loaded_model.score(X_test, y_test)
 print(result)
+
+
+from sklearn.metrics import confusion_matrix
+print(confusion_matrix(y_test, predictions))
