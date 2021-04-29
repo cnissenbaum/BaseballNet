@@ -1,3 +1,5 @@
+# Data Parsing is a set of functions that helps move the data into a csv with the desired statistics
+
 import pandas as pd
 import csv
 import math

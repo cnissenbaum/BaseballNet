@@ -1,4 +1,4 @@
-#tensor flow test 2
+# tf.py uses tensorflow to build a neural network Ml model
 
 import pandas as pd
 import numpy as np
@@ -32,8 +32,8 @@ X_test = X_known[TRAIN_SIZE:]
 y_test = y_known[TRAIN_SIZE:]
 
 network = models.Sequential()
-network.add(layers.Dense(784, activation='relu', input_shape=(28 * 28,)))
-network.add(layers.Dense(784, activation='relu', input_shape=(28 * 28,)))
+network.add(layers.Dense(32, activation='relu', input_shape=(28 * 28,)))
+network.add(layers.Dense(32, activation='relu', input_shape=(28 * 28,)))
 network.add(layers.Dense(10, activation='softmax'))
 network.compile(optimizer='adam',
                 loss='categorical_crossentropy'

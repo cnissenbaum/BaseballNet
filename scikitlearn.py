@@ -1,22 +1,39 @@
+# scikitlearn.py uses the scikit learn library to create a machine learning model
+# This program uses the mlp function to build a neural network to predict the results of baseball games using training data from 2010-2020
+
+
+
 import numpy as np
 from sklearn.neural_network import MLPClassifier
 import pandas as pd
 import pickle
 
-
+# load data from csv
 df = pd.read_csv('LongGameData.csv')
+
+# make the first 32 columns the input data
+# these columns are the statistics
 X_data = df.iloc[:,:32].values # 104
+
+# make the last column the output data
+# uses supervised machine learning
+# output data is the result from the last game
 y_data = df.iloc[:,32].values
 print('Data Done')
+
 print('Start testing')
+# mix up data so we don't always use the same testing and training data
 KNOWN_SIZE = len(y_data)
 indices = np.random.permutation(KNOWN_SIZE)
 X_known = X_data[indices]
 y_known = y_data[indices]
 
+# use most of the data as training data and the rest as test data
 TRAIN_FRACTION = 0.90
 TRAIN_SIZE = int(TRAIN_FRACTION*KNOWN_SIZE)
-TEST_SIZE = KNOWN_SIZE - TRAIN_SIZE   
+TEST_SIZE = KNOWN_SIZE - TRAIN_SIZE  
+
+# make training and testing sets
 X_train = X_known[:TRAIN_SIZE]
 y_train = y_known[:TRAIN_SIZE]
 
