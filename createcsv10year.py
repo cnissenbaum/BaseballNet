@@ -5,6 +5,10 @@ import re
 import numpy as np
 # import unidecode
 
+### This function creates a csv file that contains the data for our Neural Network
+# It uses three spreadsheets to compile the necessary rows of data, which includes
+# both batting and pithing stats. 
+###
 def create_csv():
 
     # game = 0
@@ -59,7 +63,9 @@ def create_csv():
         w.writerow(row)
     f.close()
 
-
+### This is a helper finction that gets the statistics for the pitchers in the game
+# returns an array of the data we are interested in
+###
 def get_game_pitching_data(name, data):
 
     stats = []
@@ -75,7 +81,9 @@ def get_game_pitching_data(name, data):
     # print("P: " + name)
     return [data[-1][9]] + data[-1][28:34]
 
-
+### This is a helper finction that gets the statistics for the batters in the game
+# returns an array of the data we are interested in
+###
 def get_game_batting_data(name, data):
     
     for line in data:

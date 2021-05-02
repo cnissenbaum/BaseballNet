@@ -55,13 +55,16 @@ if USE_SCALER == True:
     X_test = scaler.transform(X_test)
     
 
-
+# We have found that (64, 32, 16, 8) is generally the best case in terms of layer sizes
+# Also an initial learning rate of 0.03 works betteer than any other
 mlp = MLPClassifier(hidden_layer_sizes=(64,8,8,8), max_iter=400, alpha=1e-6, activation = "relu",
                         solver='adam', verbose=True, shuffle=True, early_stopping = False, tol=1e-6, 
                         random_state=None, # reproduceability
                         learning_rate_init=.03, learning_rate = 'constant') #invscaling, adaptive, constant
 print("\n\n++++++++++  TRAINING  +++++++++++++++\n\n")
 mlp.fit(X_train, y_train)
+
+# We generally average arounf 53-57% accuracy which I would consider a win.
 
 
 """
